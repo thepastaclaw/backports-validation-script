@@ -18,6 +18,7 @@ import argparse
 import json
 
 import gspread
+from gspread.exceptions import APIError, WorksheetNotFound
 from oauth2client.service_account import ServiceAccountCredentials
 from github import Github
 
@@ -316,7 +317,7 @@ def main():
         print(file)
         try:
             ws = spreadsheet.worksheet(sheet_name)
-        except Exception as e:
+        except (APIError, WorksheetNotFound) as e:
             print(f"Skipping sheet '{sheet_name}': {e}")
             continue
         rows = ws.get_all_records()
